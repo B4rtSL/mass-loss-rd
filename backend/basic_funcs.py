@@ -6,7 +6,7 @@ g=9.81
 test = 'C:/Users/barto/Desktop/inżynierka/test-data/cz-data.xlsx'
 
 def velocity(mass, rho, area, cz):
-    velocity = 2*mass*g/rho/area/cz
+    velocity = (2*mass*g/rho/area/cz)^0.5
     return print(velocity)
 
 #this function takes path to excel file with data as an agrument and returns the data in array of 2 1D arrays
