@@ -9,6 +9,10 @@ def velocity(mass, rho, area, cz):
     velocity = (2*mass*g/rho/area/cz)**0.5
     return velocity
 
+def cz(mass, rho, area, V):
+    cz = 2*mass*g/rho/area/V**2
+    return cz
+
 def velocity_arr(mass, rho, area, cz_arr):
     velocities = []
     for i in cz_arr:
@@ -85,3 +89,20 @@ def lift_to_drag(cz, cx):
     array_cx = cx
     lift_drag = np.divide(array_cz, array_cx)
     return lift_drag
+
+#this function solves polynomial eq with known right side and returns real root within predicted range
+#
+def poly_root(x_es, y_es, deg, arg):
+    coeff_arr = np.polyfit(x_es, y_es, deg)
+    right_arr = [0] * (deg+1)
+    right_arr[deg] = right_arr[deg] + arg
+    eq_arr = np.subtract(coeff_arr, right_arr)
+    roots = np.roots(eq_arr)
+    real_valued = roots.real[abs(roots.imag)<1e-5]
+
+    for i in real_valued:
+        if np.polyval(coeff_arr, i) < arg + 1 and np.polyval(coeff_arr, i) > arg - 1:
+         searched = i
+
+    return searched
+    
