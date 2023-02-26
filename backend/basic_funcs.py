@@ -7,11 +7,19 @@ test = 'C:/Users/barto/Desktop/inżynierka/test-data/cz-data.xlsx'
 
 def velocity(mass, rho, area, cz):
     velocity = (2*mass*g/rho/area/cz)**0.5
-    return print(velocity)
+    return velocity
+
+def velocity_arr(mass, rho, area, cz_arr):
+    velocities = []
+    for i in cz_arr:
+        velocity = (2*mass*g/rho/area/i)**0.5
+        velocities.append(velocity)
+    velocity_arr = np.array(velocities)
+    return velocity_arr
 
 #this function takes path to excel file with data as an agrument and returns the data in array of 2 1D arrays
-def aero_prep(path):
-    data = pd.read_excel(path)
+def aero_prep():
+    data = pd.read_excel(r'C:/Users/barto/Desktop/inżynierka/test-data/cz-data.xlsx')
 
     # considering 2 column file with alpha (deg) angle in 1st column and Cz in 2nd
     list_cz = data['cz-plane'].values.tolist()
@@ -39,7 +47,7 @@ def aero_prep(path):
     return double_arr
 
 #this function prepares drag-polar array based on cz-charasteristics and user input
-def cx(aero_prep_res, cx0, lambda_e):
+def cx_arr(aero_prep_res, cx0, lambda_e):
     double_arr = aero_prep_res
     cz = double_arr[1]
     pi=np.pi
@@ -49,6 +57,11 @@ def cx(aero_prep_res, cx0, lambda_e):
         cx.append(cxs)
     array_cx = np.array(cx)
     return array_cx
+
+#non-array drag-polar
+def cx(cz, cx0, lambda_e):
+    pi=np.pi
+    return cx0 + cz*cz/pi/lambda_e
 
 #this function takes users input file consisting of cz/alpha points and returns array of interpolated values
 #args are results of aero-prep and degree of wanted polynomial
@@ -66,5 +79,9 @@ def interpolator(double_arr, deg, new_arg_range_arr):
     polies_arr=np.array(polies)
     return polies_arr
 
-
-#def lift_to_drag(aero_prep, cx):
+#this function returns lift-to-drag coeff
+def lift_to_drag(cz, cx):
+    array_cz = cz
+    array_cx = cx
+    lift_drag = np.divide(array_cz, array_cx)
+    return lift_drag
