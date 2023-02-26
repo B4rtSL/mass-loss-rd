@@ -51,9 +51,8 @@ def aero_prep():
     return double_arr
 
 #this function prepares drag-polar array based on cz-charasteristics and user input
-def cx_arr(aero_prep_res, cx0, lambda_e):
-    double_arr = aero_prep_res
-    cz = double_arr[1]
+def cx_arr(array_cz, cx0, lambda_e):
+    cz = array_cz
     pi=np.pi
     cx  = []
     for i in cz:
@@ -91,18 +90,29 @@ def lift_to_drag(cz, cx):
     return lift_drag
 
 #this function solves polynomial eq with known right side and returns real root within predicted range
-#
+#finds angle of attack for vmax 
 def poly_root(x_es, y_es, deg, arg):
     coeff_arr = np.polyfit(x_es, y_es, deg)
     right_arr = [0] * (deg+1)
     right_arr[deg] = right_arr[deg] + arg
     eq_arr = np.subtract(coeff_arr, right_arr)
     roots = np.roots(eq_arr)
-    real_valued = roots.real[abs(roots.imag)<1e-5]
 
+    real_valued = roots.real[abs(roots.imag)<1e-5]
     for i in real_valued:
         if np.polyval(coeff_arr, i) < arg + 1 and np.polyval(coeff_arr, i) > arg - 1:
          searched = i
 
     return searched
-    
+
+def new_alph_arr(alph_arr, poly_root):
+    new_alph_arr = np.linspace(poly_root, max(alph_arr), 40) 
+    return new_alph_arr
+
+def new_cz_arr(new_alph_arr, coeff_arr):
+    czs = []
+    for i in new_alph_arr:
+        new_cz = np.polyval(coeff_arr, i)
+        czs.append(new_cz)
+    new_cz_arr = np.array(czs)
+    return new_cz_arr
