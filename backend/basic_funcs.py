@@ -6,7 +6,7 @@ g=9.81
 test = 'C:/Users/barto/Desktop/inżynierka/test-data/cz-data.xlsx'
 
 def velocity(mass, rho, area, cz):
-    velocity = (2*mass*g/rho/area/cz)^0.5
+    velocity = (2*mass*g/rho/area/cz)**0.5
     return print(velocity)
 
 #this function takes path to excel file with data as an agrument and returns the data in array of 2 1D arrays
@@ -25,6 +25,19 @@ def aero_prep(path):
 
     return double_arr
 
+def interpolator(double_arr):
+    coeff_arr = np.polyfit(double_arr[0], double_arr[1], 6)
+    reverse_coeff_arr = coeff_arr[::-1]
+    polies = []
+    for i in double_arr[0]:
+        for j in range(7):
+            pom = i**j*reverse_coeff_arr[j]
+            poly = poly + pom 
+        polies.append(poly)
+    polies_arr=np.array(polies)
+    return print(polies_arr)
+
+
 def cx(aero_prep, cx0, lambda_e):
     path = input()
     double_arr = aero_prep(path)
@@ -38,3 +51,4 @@ def cx(aero_prep, cx0, lambda_e):
     array_cx = np.array(cx)
     return array_cx
 
+#def lift_to_drag(aero_prep, cx):

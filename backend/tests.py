@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from scipy import interpolate
+import basic_funcs
 
 # 'C:/Users/barto/Desktop/inżynierka/test-data/cz-data.xlsx'
 test2 = input()
@@ -31,3 +32,16 @@ def aero_prep(path):
   
 foo = aero_prep(test2)
 print(foo[1])
+coeff_arr = np.polyfit(foo[0], foo[1], 6)
+reverse_coeff_arr = coeff_arr[::-1]
+print(coeff_arr)
+print(reverse_coeff_arr)
+polies = []
+poly = 0
+for i in foo[0]:
+    for j in range(7):
+        pom = (i**j)*(reverse_coeff_arr[j])
+        poly = poly + pom 
+    polies.append(poly)
+polies_arr=np.array(polies)
+print(polies_arr)

@@ -1,7 +1,7 @@
 import numpy as np
 import math
 import matplotlib.pyplot as plt
-
+import basic_funcs 
 
 def breguetJet(startmass, nompow_jet,fuelcons_jet,propnumber,altitude,aspectratio,cx0,area,vmin,vmax):
     
