@@ -83,7 +83,7 @@ def breguetJet_2set(startmass, nompow_jet,fuelcons_jet,propnumber,altitude,aspec
 
     times_arr=100*np.array(times)     
     ranges_arr=np.array(ranges)    
-    velocity_arr = basf.velocity_arr(calc_mass, air_density, area, new_cz_arr)
+    velocity_arr = 3.6*basf.velocity_arr(calc_mass, air_density, area, new_cz_arr)
 
     #preparing lists of needed values
     times_list=list(times_arr)    
@@ -140,11 +140,11 @@ def breguetJet_3set(startmass, nompow_jet,fuelcons_jet,propnumber,altitude,aspec
 
     times_arr=100*np.array(times)     
     ranges_arr=np.array(ranges)    
-
+    velocity_arr_export = np.multiply(3.6, velocity_arr)
     #preparing lists of needed values
     times_list=list(times_arr)    
     ranges_list=list(ranges_arr)
-    velocities_list = list(velocity_arr)
+    velocities_list = list(velocity_arr_export)
   
     #returning dictionary, as this is form needed by Plotly
     return_dict={

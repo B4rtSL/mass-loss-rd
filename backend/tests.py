@@ -26,7 +26,8 @@ print(new_cz_arr)
 
 a = [0, 3]
 b = [4, 5]
-c = np.multiply(a, b)
+c = np.multiply(5, b)
+print(c)
 
 
 fig = plt.figure()
