@@ -41,7 +41,7 @@ def aero_prep():
         if array_cz[j] == min(array_cz):
             min_value_index = j
 
-    #cutting original input arrays to needed range of values for better fit
+    #cutting original input arrays to needed range of Cz values for better fit
     new_cz_arr = array_cz[min_value_index:max_value_index+1]
     new_alpha_arr = array_alpha[min_value_index:max_value_index+1]
 
@@ -105,10 +105,12 @@ def poly_root(x_es, y_es, deg, arg):
 
     return searched
 
+#cuts the alpha array from poly root to alpha of Cz_max (if provided from aero_prep)
 def new_alph_arr(alph_arr, poly_root):
     new_alph_arr = np.linspace(poly_root, max(alph_arr), 40) 
     return new_alph_arr
 
+#this function creates new cz array based on expected range - from max V Cz to Cz_max
 def new_cz_arr(new_alph_arr, coeff_arr):
     czs = []
     for i in new_alph_arr:

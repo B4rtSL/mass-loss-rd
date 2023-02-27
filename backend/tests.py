@@ -21,9 +21,14 @@ czs = []
 for i in new_alph_arr:
     new_cz = np.polyval(coeff_arr, i)
     czs.append(new_cz)
-
 new_cz_arr = np.array(czs)
 print(new_cz_arr)
+
+a = [0, 3]
+b = [4, 5]
+c = np.multiply(a, b)
+
+
 fig = plt.figure()
 plt.plot(foo[0],foo[1], new_alph_arr, new_cz_arr)
 plt.show()
