@@ -101,3 +101,61 @@ def breguetPropeller_2set(startmass,nompow_prop,fuelcons_prop,propnumber,altitud
 
     return return_dict
 
+def breguetPropeller_3set(startmass,nompow_prop,fuelcons_prop,propnumber,altitude,aspectratio,cx0,area,vmin,vmax,efficiency):
+
+    #Air density from SI
+    air_density=1.2255*(1-(altitude/44300))**4.256
+
+    #masses needed in calculations
+    diffmass_prop=propnumber*nompow_prop*fuelcons_prop*0.75 
+    fuelmass_prop=0.2*startmass-diffmass_prop                 
+    endmass_prop=startmass-fuelmass_prop 
+    calc_mass = (startmass + endmass_prop)/2 
+
+    #implementation of cz and cx arrays
+    double_arr = basf.aero_prep()
+    alpha_arr = double_arr[0]
+    cz_arr = double_arr[1]
+    alpha_root = basf.poly_root(alpha_arr, cz_arr, 5, basf.cz(calc_mass, air_density, area, vmax))
+    coeff_arr = np.polyfit(alpha_arr, cz_arr, 5)
+
+    new_alph_arr = basf.new_alph_arr(alpha_arr, alpha_root)
+    new_cz_arr = basf.new_cz_arr(new_alph_arr, coeff_arr)
+    new_cx_arr = basf.cx_arr(new_cz_arr, cx0, aspectratio)
+    
+    lift_drag = basf.lift_to_drag(new_cz_arr, new_cx_arr)                          
+
+    #array of velocities, based on cz range
+    velocity_arr=basf.velocity_arr(calc_mass, air_density, area, new_cz_arr)
+    L_D_velocity = np.divide(lift_drag, velocity_arr)
+
+    #creating empty arrays for further calculations
+    times=[]
+    ranges=[]
+
+    #loop calculations of Breguet formulas
+    for i in L_D_velocity:
+        time = i*efficiency/9.81/fuelcons_prop*np.log(startmass/endmass_prop)
+        times.append(time)
+
+    for i in lift_drag:
+        range = i*efficiency/9.81/fuelcons_prop*np.log(startmass/endmass_prop)
+        ranges.append(range)
+    
+    times_arr=100*np.array(times)    
+    ranges_arr=np.array(ranges) 
+
+    #preparing lists of needed values
+    x_list=list(np.multiply(3.6, velocity_arr))
+    times_list=list(times_arr)    
+    ranges_list=list(ranges_arr)
+   
+    #returning dictionary, as this is form needed by Plotly
+    return_dict={
+        'times_list':times_list,
+        'ranges_list':ranges_list,
+        'x_list':x_list
+    }
+
+    return return_dict
+
