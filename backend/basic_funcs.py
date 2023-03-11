@@ -118,3 +118,34 @@ def new_cz_arr(new_alph_arr, coeff_arr):
         czs.append(new_cz)
     new_cz_arr = np.array(czs)
     return new_cz_arr
+
+#this function takes path to excel file with data as an agrument and returns the data in array of 3 1D arrays
+def engine_prep():
+    data = pd.read_excel(r'C:/Users/barto/Desktop/inżynierka/test-data/engine-data.xlsx')
+
+    # considering 3 column file with velocity in 1st column, eta in 2nd and disposable power in 3rd
+    list_velos = data['velocity'].values.tolist()
+    array_velos = np.array(list_velos)
+
+    list_eta = data['eta'].values.tolist()
+    array_eta = np.array(list_eta)
+
+    list_power_disp = data['power-disp'].values.tolist()
+    array_power_disp = np.array(list_power_disp)
+
+    triple_arr = [array_velos, array_eta ,array_power_disp]
+
+    return triple_arr
+
+def rpm_prep():
+    data = pd.read_excel(r'C:/Users/barto/Desktop/inżynierka/test-data/rpm-data.xlsx')
+
+    list_rpm = data['rpm'].values.tolist()
+    array_rpm = np.array(list_rpm)
+
+    list_power_rpm = data['power-rpm'].values.tolist()
+    array_power_rpm = np.array(list_power_rpm)
+
+    double_arr = [array_rpm, array_power_rpm]
+
+    return double_arr
