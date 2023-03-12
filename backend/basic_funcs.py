@@ -149,3 +149,27 @@ def rpm_prep():
     double_arr = [array_rpm, array_power_rpm]
 
     return double_arr
+
+def fuelcons_prep():
+    data = pd.read_excel(r'C:/Users/barto/Desktop/inżynierka/test-data/fuelcons-data.xlsx')
+
+    list_rpm = data['rpm'].values.tolist()
+    array_rpm = np.array(list_rpm)
+
+    list_fuelcons_rpm = data['fuelcons'].values.tolist()
+    array_fuelcons_rpm = np.array(list_fuelcons_rpm)
+
+    double_arr = [array_rpm, array_fuelcons_rpm]
+
+    return double_arr
+
+def mixer(coeff_array1, deg, arg):
+    right_arr = [0]*(deg+1)
+    right_arr[deg] = right_arr[deg] + arg
+    eq_arr = np.subtract(coeff_array1, right_arr)
+    roots = np.roots(eq_arr)
+    real_valued = roots.real[abs(roots.imag)<1e-5]
+    for i in real_valued:
+        if i>0 and np.polyval(coeff_array1, i) < arg + 0.1 and np.polyval(coeff_array1, i) > arg - 0.1:
+            n = i
+    return n

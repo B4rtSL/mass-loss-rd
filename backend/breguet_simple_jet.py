@@ -30,6 +30,7 @@ def breguetJet(startmass, nompow_jet,fuelcons_jet,propnumber,altitude,aspectrati
     
     times_arr=100*np.array(times)     
     ranges_arr=np.array(ranges)    
+    velocities = np.multiply(3.6, x)
 
     #preparing lists of needed values
     x_list=list(x*3.6)
@@ -42,8 +43,9 @@ def breguetJet(startmass, nompow_jet,fuelcons_jet,propnumber,altitude,aspectrati
         'ranges_list':ranges_list,
         'x_list':x_list
     }
+    triple_arr = [velocities, times_arr, ranges_arr]
 
-    return return_dict
+    return triple_arr
 
 def breguetJet_2set(startmass, nompow_jet,fuelcons_jet,propnumber,altitude,aspectratio,cx0,area, vmin, vmax):
     
@@ -97,7 +99,9 @@ def breguetJet_2set(startmass, nompow_jet,fuelcons_jet,propnumber,altitude,aspec
         'x_list':velocities_list
     }
 
-    return return_dict
+    triple_arr = [velocity_arr, times_arr, ranges_arr]
+
+    return triple_arr
 
 def breguetJet_3set(startmass, nompow_jet,fuelcons_jet,propnumber,altitude,aspectratio,cx0,area, vmin, vmax):
     
@@ -153,5 +157,7 @@ def breguetJet_3set(startmass, nompow_jet,fuelcons_jet,propnumber,altitude,aspec
         'x_list':velocities_list
     }
 
-    return return_dict
+    triple_arr = [velocity_arr_export, times_arr, ranges_arr]
+
+    return triple_arr
     

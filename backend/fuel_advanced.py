@@ -8,7 +8,7 @@ engine_prep = basf.engine_prep()
 velocity = engine_prep[0]
 eta = engine_prep[1]
 disp_pow = engine_prep[2]
-
+disp_pow = np.multiply(1.3, disp_pow)
 '''
 eff_pow = np.divide(disp_pow, eta)
 print(disp_pow)
@@ -119,7 +119,7 @@ def mixer(coeff_array1, deg, arg):
 
 #print(mixer(power_coeff6, disp_pow_coeff, 6, 1500))
 
-new_power_range = np.linspace(150, 2000, 50)
+new_power_range = np.linspace(150, 1660, 50)
 pairs = []
 for iter in new_power_range:
     pair = 0
@@ -136,10 +136,10 @@ rpm_of_velo_arr = np.array(pairs)
 velo_for_rpm_arr = np.array(pairs2)
 
 #print(disp_pow)
-#fig = plt.figure()
-#plt.plot(rpm, rpm_power, 'o', new_rpm_range, power_arr6)
-
-
+fig = plt.figure()
+plt.plot(new_velo_range, disp_pow_arr, velocity, disp_pow)
 fig2 = plt.figure()
 plt.plot(velo_for_rpm_arr, rpm_of_velo_arr, 'o')
+fig3 = plt.figure()
+plt.plot(new_rpm_range, power_arr6)
 plt.show()

@@ -30,7 +30,7 @@ def breguetPropeller(startmass,nompow_prop,fuelcons_prop,propnumber,altitude,asp
     
     times_arr=100*np.array(times)    
     ranges_arr=np.array(ranges) 
-
+    velocities = np.multiply(3.6, x)
     #preparing lists of needed values
     x_list=list(x*3.6)
     times_list=list(times_arr)    
@@ -43,7 +43,8 @@ def breguetPropeller(startmass,nompow_prop,fuelcons_prop,propnumber,altitude,asp
         'x_list':x_list
     }
 
-    return return_dict
+    triple_arr = [velocities, times_arr, ranges_arr]
+    return triple_arr
 
 def breguetPropeller_2set(startmass,nompow_prop,fuelcons_prop,propnumber,altitude,aspectratio,cx0,area,vmin,vmax,efficiency):
 
@@ -77,16 +78,16 @@ def breguetPropeller_2set(startmass,nompow_prop,fuelcons_prop,propnumber,altitud
     #loop calculations of Breguet formulas
     for i in new_cz_arr:
         pom = (efficiency/fuelcons_prop/9.81**1.5)*math.sqrt(2*air_density*area)
-        time = pom*i**1.5/basf.cx(i, cx0, aspectratio)*(1/math.sqrt(endmass_prop) - 1/math.sqrt(startmass))
+        time = 1000*pom*i**1.5/basf.cx(i, cx0, aspectratio)*(1/math.sqrt(endmass_prop) - 1/math.sqrt(startmass))
         times.append(time)
 
     for i in lift_drag:
-        range = i*efficiency/9.81/fuelcons_prop*np.log(startmass/endmass_prop)
+        range = 3600*i*efficiency/9.81/fuelcons_prop*np.log(startmass/endmass_prop)
         ranges.append(range)
     
     times_arr=100*np.array(times)    
     ranges_arr=np.array(ranges) 
-
+    velocity_arr = np.multiply(3.6, x)
     #preparing lists of needed values
     x_list=list(np.multiply(3.6, x))
     times_list=list(times_arr)    
@@ -99,7 +100,9 @@ def breguetPropeller_2set(startmass,nompow_prop,fuelcons_prop,propnumber,altitud
         'x_list':x_list
     }
 
-    return return_dict
+    triple_arr = [velocity_arr, times_arr, ranges_arr]
+
+    return triple_arr
 
 def breguetPropeller_3set(startmass,nompow_prop,fuelcons_prop,propnumber,altitude,aspectratio,cx0,area,vmin,vmax,efficiency):
 
@@ -135,21 +138,22 @@ def breguetPropeller_3set(startmass,nompow_prop,fuelcons_prop,propnumber,altitud
 
     #loop calculations of Breguet formulas
     for i in L_D_velocity:
-        time = i*efficiency/9.81/fuelcons_prop*np.log(startmass/endmass_prop)
+        time = 1000*i*efficiency/9.81/fuelcons_prop*np.log(startmass/endmass_prop)
         times.append(time)
 
     for i in lift_drag:
-        range = i*efficiency/9.81/fuelcons_prop*np.log(startmass/endmass_prop)
+        range = 3600*i*efficiency/9.81/fuelcons_prop*np.log(startmass/endmass_prop)
         ranges.append(range)
     
     times_arr=100*np.array(times)    
     ranges_arr=np.array(ranges) 
-
+    velocity_arr_export = np.multiply(3.6, velocity_arr)
+    
     #preparing lists of needed values
-    x_list=list(np.multiply(3.6, velocity_arr))
+    x_list=list(velocity_arr_export)
     times_list=list(times_arr)    
     ranges_list=list(ranges_arr)
-   
+    
     #returning dictionary, as this is form needed by Plotly
     return_dict={
         'times_list':times_list,
@@ -157,5 +161,6 @@ def breguetPropeller_3set(startmass,nompow_prop,fuelcons_prop,propnumber,altitud
         'x_list':x_list
     }
 
-    return return_dict
+    triple_arr = [velocity_arr_export, times_arr, ranges_arr]
+    return triple_arr
 
