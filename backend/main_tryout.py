@@ -48,7 +48,7 @@ plt.plot(breguet3_velocity, breguet3_ranges, "-.g" , label = "Breguet-range-prop
 plt.legend(loc="best")
 plt.xlabel("Velocity [km/h]")
 plt.ylabel("Range [km]")
-
+plt.title("Range on Velocity")
 
 fig5 = plt.figure()
 plt.plot(breguet1_velocity, breguet1_times, "--r" , label = "Breguet-time-propeller-1")
@@ -56,5 +56,6 @@ plt.plot(breguet2_velocity, breguet2_times,"-b" , label = "Breguet-time-propelle
 plt.plot(breguet3_velocity, breguet3_times, "-.g" , label = "Breguet-time-propeller-3")
 plt.legend(loc="best")
 plt.xlabel("Velocity [km/h]")
-plt.ylabel("Time [km]")
+plt.ylabel("Time [100h]")
+plt.title("Endurance on Velocity")
 plt.show()

@@ -6,8 +6,9 @@ engine_prep = basf.engine_prep()
 velocity = engine_prep[0]
 eta = engine_prep[1]
 disp_pow = engine_prep[2]
-disp_pow = np.multiply(1.3, disp_pow)
+#disp_pow = np.multiply(1.3, disp_pow)
 disp_pow_coeff = np.polyfit(velocity, disp_pow, 6)
+eta_coeff = np.polyfit(velocity, eta, 6)
 
 rpm_prep = basf.rpm_prep()
 rpm = rpm_prep[0]
@@ -68,13 +69,27 @@ for iter4 in rpm_of_velo_arr:
     new = np.polyval(fuelcons_coeff, iter4)
     list_new.append(new)
 fuel_of_V = np.array(list_new)
+fuel_of_V_coeff = np.polyfit(new_velo_range, fuel_of_V, 6)
+
 
 fig = plt.figure()
 plt.plot(new_velo_range, rpm_of_velo_arr)
+plt.xlabel("Velocity [m/s]")
+plt.ylabel("RPM")
+plt.title("RPM on Velocity")
 fig2 = plt.figure()
 plt.plot(new_velo_range, fuel_of_V)
+plt.xlabel("Velocity [m/s]")
+plt.ylabel("Specific Fuel Consumption [kg/kWh]")
+plt.title("Specific Fuel Consumption on Velocity")
 fig3 = plt.figure()
 plt.plot(new_velo_range, powV_arr)
+plt.xlabel("Velocity [m/s]")
+plt.ylabel("Available Power [kW]")
+plt.title("Available Power on Velocity")
 fig4 = plt.figure()
-plt.plot(new_rpm_range, fuelcons_arr, rpm_fuelcons, fuelcons_of_rpm, 'o')
+plt.plot(rpm_fuelcons, fuelcons_of_rpm, 'o')
+plt.xlabel("RPM")
+plt.ylabel("Specific Fuel Consumption [kg/kWh]")
+plt.title("Specific Fuel Consumption on RPM")
 plt.show()
