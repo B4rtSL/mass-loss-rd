@@ -36,6 +36,6 @@ class Hawker:
     aspectratio = 4.656
     cx0 = 0.0252
     area = 28.06
-    vmin = 25
+    vmin = 47
     vmax = 194.44
     wmax = 24
