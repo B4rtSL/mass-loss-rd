@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import breguet_simple_propeller as bsp
 from data_container import Hawker
 
+aero_input = 'C:/Users/barto/Desktop/inżynierka/test-data/cz-data.xlsx'
 altitude = 0
 efficiency = 0.8
 area = Hawker.area
@@ -22,12 +23,12 @@ breguet1_velocity = breguet1[0]
 breguet1_times = breguet1[1]
 breguet1_ranges = breguet1[2]
 
-breguet2 = bsp.breguetPropeller_2set(startmass, nompow, avg_fuelcons, propnumber, altitude, aspectratio, cx0, area, vmin, vmax, efficiency)
+breguet2 = bsp.breguetPropeller_2set(startmass, nompow, avg_fuelcons, propnumber, altitude, aspectratio, cx0, area, vmin, vmax, efficiency, aero_input)
 breguet2_velocity = breguet2[0]
 breguet2_times = breguet2[1]
 breguet2_ranges = breguet2[2]
 
-breguet3 = bsp.breguetPropeller_3set(startmass, nompow, avg_fuelcons, propnumber, altitude, aspectratio, cx0, area, vmin, vmax, efficiency)
+breguet3 = bsp.breguetPropeller_3set(startmass, nompow, avg_fuelcons, propnumber, altitude, aspectratio, cx0, area, vmin, vmax, efficiency, aero_input)
 breguet3_velocity = breguet3[0]
 breguet3_times = breguet3[1]
 breguet3_ranges = breguet3[2]

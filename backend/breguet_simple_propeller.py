@@ -46,7 +46,7 @@ def breguetPropeller(startmass,nompow_prop,fuelcons_prop,propnumber,altitude,asp
     triple_arr = [velocities, times_arr, ranges_arr]
     return triple_arr
 
-def breguetPropeller_2set(startmass,nompow_prop,fuelcons_prop,propnumber,altitude,aspectratio,cx0,area,vmin,vmax,efficiency):
+def breguetPropeller_2set(startmass,nompow_prop,fuelcons_prop,propnumber,altitude,aspectratio,cx0,area,vmin,vmax,efficiency, aero_input):
 
     #Air density from SI
     air_density=1.2255*(1-(altitude/44300))**4.256
@@ -58,7 +58,7 @@ def breguetPropeller_2set(startmass,nompow_prop,fuelcons_prop,propnumber,altitud
     calc_mass = (startmass + endmass_prop)/2 
 
     #implementation of cz and cx arrays
-    double_arr = basf.aero_prep()
+    double_arr = basf.aero_prep(aero_input)
     alpha_arr = double_arr[0]
     cz_arr = double_arr[1]
     alpha_root = basf.poly_root(alpha_arr, cz_arr, 5, basf.cz(calc_mass, air_density, area, vmax))
@@ -104,7 +104,7 @@ def breguetPropeller_2set(startmass,nompow_prop,fuelcons_prop,propnumber,altitud
 
     return triple_arr
 
-def breguetPropeller_3set(startmass,nompow_prop,fuelcons_prop,propnumber,altitude,aspectratio,cx0,area,vmin,vmax,efficiency):
+def breguetPropeller_3set(startmass,nompow_prop,fuelcons_prop,propnumber,altitude,aspectratio,cx0,area,vmin,vmax,efficiency, aero_input):
 
     #Air density from SI
     air_density=1.2255*(1-(altitude/44300))**4.256
@@ -116,7 +116,7 @@ def breguetPropeller_3set(startmass,nompow_prop,fuelcons_prop,propnumber,altitud
     calc_mass = (startmass + endmass_prop)/2 
 
     #implementation of cz and cx arrays
-    double_arr = basf.aero_prep()
+    double_arr = basf.aero_prep(aero_input)
     alpha_arr = double_arr[0]
     cz_arr = double_arr[1]
     alpha_root = basf.poly_root(alpha_arr, cz_arr, 5, basf.cz(calc_mass, air_density, area, vmax))

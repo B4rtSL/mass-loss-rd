@@ -22,8 +22,8 @@ def velocity_arr(mass, rho, area, cz_arr):
     return velocity_arr
 
 #this function takes path to excel file with data as an agrument and returns the data in array of 2 1D arrays
-def aero_prep():
-    data = pd.read_excel(r'C:/Users/barto/Desktop/inżynierka/test-data/cz-data.xlsx')
+def aero_prep(aero_input):
+    data = pd.read_excel(aero_input)
 
     # considering 2 column file with alpha (deg) angle in 1st column and Cz in 2nd
     list_cz = data['cz-plane'].values.tolist()
@@ -120,8 +120,8 @@ def new_cz_arr(new_alph_arr, coeff_arr):
     return new_cz_arr
 
 #this function takes path to excel file with data as an agrument and returns the data in array of 3 1D arrays
-def engine_prep():
-    data = pd.read_excel(r'C:/Users/barto/Desktop/inżynierka/test-data/engine-data.xlsx')
+def engine_prep(engine_input):
+    data = pd.read_excel(engine_input)
 
     # considering 3 column file with velocity in 1st column, eta in 2nd and disposable power in 3rd
     list_velos = data['velocity'].values.tolist()
@@ -137,8 +137,8 @@ def engine_prep():
 
     return triple_arr
 
-def rpm_prep():
-    data = pd.read_excel(r'C:/Users/barto/Desktop/inżynierka/test-data/rpm-data.xlsx')
+def rpm_prep(rpm_input):
+    data = pd.read_excel(rpm_input)
 
     list_rpm = data['rpm'].values.tolist()
     array_rpm = np.array(list_rpm)
@@ -150,8 +150,8 @@ def rpm_prep():
 
     return double_arr
 
-def fuelcons_prep():
-    data = pd.read_excel(r'C:/Users/barto/Desktop/inżynierka/test-data/fuelcons-data.xlsx')
+def fuelcons_prep(fuelcons_input):
+    data = pd.read_excel(fuelcons_input)
 
     list_rpm = data['rpm'].values.tolist()
     array_rpm = np.array(list_rpm)
@@ -173,3 +173,32 @@ def mixer(coeff_array1, deg, arg):
         if i>0 and np.polyval(coeff_array1, i) < arg + 0.1 and np.polyval(coeff_array1, i) > arg - 0.1:
             n = i
     return n
+
+def new_values_array(array_x, array_y, deg, new_x_range_array):
+    coeff = np.polyfit(array_x, array_y, deg)
+    list = []
+    for i in new_x_range_array:
+        new_value = np.polyval(coeff, i)
+        list.append(new_value)
+    array = np.array(list)
+    return array
+
+def engine_prep_const_blade(engine_input):
+    data = pd.read_excel(engine_input)
+
+    # considering 3 column file with velocity in 1st column, eta in 2nd and disposable power in 3rd
+    list_disp_pow_velos = data['velocity'].values.tolist()
+    array_velos = np.array(list_disp_pow_velos)
+
+    list_power_disp = data['power-disp'].values.tolist()
+    array_power_disp = np.array(list_power_disp)
+
+    list_velo_load = data['velo-load'].values.tolist()
+    array_velo_load = np.array(list_velo_load)
+
+    list_power_load = data['power-load'].values.tolist()
+    array_power_load = np.array(list_power_load)
+
+    quadruple_arr = [array_velos, array_power_disp, array_velo_load, array_power_load]
+
+    return quadruple_arr
