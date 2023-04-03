@@ -202,3 +202,17 @@ def engine_prep_const_blade(engine_input):
     quadruple_arr = [array_velos, array_power_disp, array_velo_load, array_power_load]
 
     return quadruple_arr
+
+def eta_prep(eta_input):
+    data = pd.read_excel(eta_input)
+
+    # considering 2 column file with velocity in 1st column, eta in 2nd
+    list_velos = data['velocity'].values.tolist()
+    array_velos = np.array(list_velos)
+
+    list_eta = data['eta'].values.tolist()
+    array_eta = np.array(list_eta)
+
+    quadruple_arr = [array_velos, array_eta]
+
+    return quadruple_arr
