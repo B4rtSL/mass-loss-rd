@@ -118,7 +118,6 @@ def mixer(coeff_array1, deg, arg):
     return n
 
 #print(mixer(power_coeff6, disp_pow_coeff, 6, 1500))
-
 new_power_range = np.linspace(150, 1660, 50)
 pairs = []
 for iter in new_power_range:
@@ -136,6 +135,7 @@ rpm_of_velo_arr = np.array(pairs)
 velo_for_rpm_arr = np.array(pairs2)
 
 #print(disp_pow)
+"""
 fig = plt.figure()
 plt.plot(new_velo_range, disp_pow_arr, velocity, disp_pow)
 fig2 = plt.figure()
@@ -143,3 +143,8 @@ plt.plot(velo_for_rpm_arr, rpm_of_velo_arr, 'o')
 fig3 = plt.figure()
 plt.plot(new_rpm_range, power_arr6)
 plt.show()
+"""
+
+empty50 = [1] * 50
+eff_pow = np.multiply(1430, empty50)
+print(eff_pow[49])

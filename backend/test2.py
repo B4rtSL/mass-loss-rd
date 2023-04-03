@@ -2,13 +2,15 @@ import numpy as np
 import basic_funcs as basf
 import matplotlib.pyplot as plt
 
-engine_prep = basf.engine_prep()
+engine_input = 'C:/Users/barto/Desktop/inżynierka/test-data/engine-data.xlsx'
+engine_prep = basf.engine_prep(engine_input)
 velocity = engine_prep[0]
 eta = engine_prep[1]
 disp_pow = engine_prep[2]
 #disp_pow = np.multiply(1.3, disp_pow)
 disp_pow_coeff = np.polyfit(velocity, disp_pow, 6)
 eta_coeff = np.polyfit(velocity, eta, 6)
+
 
 rpm_prep = basf.rpm_prep()
 rpm = rpm_prep[0]
@@ -17,6 +19,8 @@ power_coeff6 = np.polyfit(rpm, rpm_power, 6)
 
 new_velo_range = np.linspace(35, 200, 50)
 new_rpm_range = np.linspace(0, 4000, 50)
+empty50 = [1] * 50
+eff_pow = np.multiply(1430, empty50)
 
 pows_of_v = []
 for i in new_velo_range:
@@ -93,3 +97,4 @@ plt.xlabel("RPM")
 plt.ylabel("Specific Fuel Consumption [kg/kWh]")
 plt.title("Specific Fuel Consumption on RPM")
 plt.show()
+
