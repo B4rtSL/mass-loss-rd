@@ -47,10 +47,10 @@ area = Cessna150.area
 aspectratio = Cessna150.aspectratio
 cx0 = Cessna150.cx0
 range_step = 100
-velocity = 38
+velocity = 38.88
 time_step = range_step / velocity
 fuelmass = Cessna150.fuelmass
-end_mass = m_i - 46
+end_mass = m_i - fuelmass + 14
 
 eta_coeff = np.polyfit(eta_velo, eta, 6)
 eta_of_chosen_velocity = np.polyval(eta_coeff, velocity)

@@ -1,4 +1,4 @@
-import pandas as pd
+import math
 import numpy as np
 import basic_funcs as basf
 import matplotlib.pyplot as plt
@@ -6,27 +6,7 @@ from data_container import Cessna150
 import time
 start_time = time.time()
 
-
 cz_input = "C:/Users/barto/Desktop/inżynierka/test-data/cessna-data/cessna-cz-data.xlsx"
-foo = basf.aero_prep(cz_input)
-
-cz_arr = foo[1]
-alph_arr = foo[0]
-cx_arr = basf.cx_arr(foo, 0.025, 4.41)
-lift_drag = basf.lift_to_drag(cz_arr, cx_arr)
-
-root = basf.poly_root(foo[0], foo[1], 5, basf.cz(2200, 1.225, 17, 150)) 
-
-coeff_arr = np.polyfit(foo[0], foo[1], 5)
-new_alph_arr = np.linspace(root, max(alph_arr), 40)
-
-czs = []
-for i in new_alph_arr:
-    new_cz = np.polyval(coeff_arr, i)
-    czs.append(new_cz)
-new_cz_arr = np.array(czs)
-
-
 fuelcons_input_cessna = "C:/Users/barto/Desktop/inżynierka/test-data/cessna-data/cessna-fuelcons-load-data.xlsx"
 rpm_input_cessna = 'C:/Users/barto/Desktop/inżynierka/test-data/cessna-data/cessna-rpm-load-data.xlsx'
 engine_input = "C:/Users/barto/Desktop/inżynierka/test-data/cessna-data/cessna-power-const.xlsx"
@@ -53,77 +33,110 @@ eta = eta_prep[1]
 
 new_rpm_range = np.linspace(2000, 3000, 50)
 new_velo_range = np.linspace(0, 100, 50)
-
+new_eff_pow_range = np.linspace(38, 75, 50)
 
 power_load_arr = np.divide(basf.new_values_array(velo_load, power_load, 1, new_velo_range), 1000)
 power_disp = np.divide(basf.new_values_array(velocity_power_disp, power_disp, 4, new_velo_range), 1000)
 power_arr6 = basf.new_values_array(rpm, rpm_power, 6, new_rpm_range)
 fuelcons_arr = basf.new_values_array(fuel_rpm, fuelcons, 6, new_rpm_range)
 eta_arr = basf.new_values_array(eta_velo, eta, 6, new_velo_range)
+fuel_of_power_coeff = np.polyfit(new_velo_range, fuelcons_arr, 6)
 
 m_i = Cessna150.startmass
 area = Cessna150.area
 aspectratio = Cessna150.aspectratio
 cx0 = Cessna150.cx0
-range_step = 1000
-velocity = 58
-time_step = range_step / velocity
-
-essential_pow = m_i*9.81*velocity/(basf.cz(m_i, 1.225, area, velocity)/basf.cx(basf.cz(m_i, 1.225, area, velocity), cx0, aspectratio))/1000
-print('Essential pow is:', essential_pow)
-
+range_step = 100
+#velocity = 26
+vmin = Cessna150.vmin
+vmax = Cessna150.vmax
+fuelmass = Cessna150.fuelmass
+end_mass = m_i - fuelmass + 14
+velocity_range = np.linspace(vmin, vmax, 50)
 eta_coeff = np.polyfit(eta_velo, eta, 6)
-eta_of_chosen_velocity = np.polyval(eta_coeff, velocity)
-print('Eta is:', eta_of_chosen_velocity)
 
-effective_pow = essential_pow/eta_of_chosen_velocity
-print('Effective pow is:', effective_pow)
-
-fuel_of_power_coeff = np.polyfit(new_velo_range, fuelcons_arr, 6)
-fuelcons_of_velo = np.polyval(fuel_of_power_coeff, effective_pow)
-
-print('fuelcons is:', fuelcons_of_velo)
-
-burnt_mass = time_step/3600*fuelcons_of_velo*effective_pow
-print('Burnt mass is:', burnt_mass)
-
-m_ii = m_i - burnt_mass
-print('M_ii:',m_ii)
-
-m_calc = (m_i + m_ii)/2
-
-essential_pow_corrected = m_calc*9.81*velocity/(basf.cz(m_calc, 1.225, area, velocity)/basf.cx(basf.cz(m_calc, 1.225, area, velocity), cx0, aspectratio))/1000
-print('Corrected essential power is:', essential_pow_corrected)
-
-effective_pow_corrected = essential_pow_corrected/eta_of_chosen_velocity
-print('Effective pow corrected is:', effective_pow_corrected)
-
-fuelcons_of_velo_corrected = np.polyval(fuel_of_power_coeff, effective_pow_corrected)
-
-burnt_mass_corrected = time_step/3600*fuelcons_of_velo_corrected*effective_pow_corrected
-
-print(burnt_mass_corrected)
-
-m_ii_corrected = m_i - burnt_mass_corrected
-
-print('M_ii_corrected = mass after first step:',m_ii_corrected)
-
-a1 = 10
-current_a = a1
-counter = 0
-while current_a > 2:
-    help_a = current_a * 0.1
-    current_a = current_a - help_a
-    counter += 1
-
-print(counter)
-print(current_a)
+ranges_final_list = []
+essential_pow_list = []
+effective_pow_list = []
+fuelcons_list = []
+iteration_list = []
+i=0
+for velocity in velocity_range:
+    ranges = []
+    endurances = []
+    time_step = range_step / velocity
+    eta_of_chosen_velocity = np.polyval(eta_coeff, velocity)
+    efficiency = eta_of_chosen_velocity
+    current_mass = Cessna150.startmass
+    #print('Current Velocity is', velocity)
+    #print(current_mass)
+    while current_mass >= end_mass:
+        i+=1
+        iteration_list.append(i)
+        essential_pow = current_mass*9.81*velocity/(basf.cz(current_mass, 1.225, area, velocity)/basf.cx(basf.cz(current_mass, 1.225, area, velocity), cx0, aspectratio))/1000
+        essential_pow_list.append(essential_pow)
+        effective_pow = essential_pow/eta_of_chosen_velocity
+        effective_pow_list.append(effective_pow)
+        #print('Effective', effective_pow)
+        if effective_pow <= 75 and effective_pow >= 28:
+            fuelcons_of_velo = np.polyval(fuel_of_power_coeff, effective_pow)
+            fuelcons_list.append(fuelcons_of_velo)
+            burnt_mass = time_step/3600*fuelcons_of_velo*effective_pow
+            m_ii = current_mass - burnt_mass
+            m_calc = (current_mass + m_ii)/2
+        else:
+            print('Power Values Exceeded')
+            break
 
 
+        A_factor=1.225*area*velocity*velocity*math.sqrt(cx0*3.14*aspectratio)
+        endurance=1000*(efficiency/9.81/velocity/fuelcons_of_velo)*math.sqrt(3.14*aspectratio/cx0)*(math.atan(2*9.81*current_mass/A_factor)-math.atan(2*9.81*m_ii/A_factor))
+        range=3.6*velocity*endurance
+        endurances.append(endurance)
+        ranges.append(range)
+        #print('Ranges:', ranges)
+        current_mass = m_ii
+    #print('Current mass after loop', current_mass)
+    range_array = np.array(ranges)
+    range_result = np.sum(range_array)
+    #print('Range Result is:', range_result)
+    ranges_final_list.append(range_result)
 
 
+ranges_final_array = np.array(ranges_final_list)
+fig1 = plt.figure()
+velocity_range = np.multiply(velocity_range, 3.6)
+plt.plot(velocity_range,ranges_final_array)
+plt.show()
+# print('efficiency:', efficiency)
+# print('Expected endmass is:', end_mass)
+# print('Final mass is:', current_mass)
+# print('Range iterated is:', i*range_step/1000, 'km')
 
+#print('Essential pow list:',essential_pow_list)
 
+# essential_pow_array = np.array(essential_pow_list)
+# effective_pow_array = np.array(effective_pow_list)
+# fuelcons_of_velo_array = np.array(fuelcons_list)
+# velocity_array_pom = [1] * len(essential_pow_array)
+# iteration_array = np.array(iteration_list)
+# velocity_array = np.multiply(velocity_array_pom, velocity)
+# range_array = np.array(ranges)
+# range_result = np.sum(range_array)
 
-print("--- %s seconds ---" % (time.time() - start_time))
+# print('Range result', range_result)
+# plt.figure(1)
+# plt.subplot(311)
+# plt.plot(iteration_array, essential_pow_array, '-')
+# plt.title("Essential Power")
+# plt.subplot(312)
+# plt.plot(iteration_array, effective_pow_array, '-')
+# plt.title("Effective Power")
+# plt.subplot(313)
+# plt.plot(iteration_array, fuelcons_of_velo_array, '-')
+# plt.title("Fuelcons")
+
+# plt.show()
+
+# print("--- %s seconds ---" % (time.time() - start_time))
 
