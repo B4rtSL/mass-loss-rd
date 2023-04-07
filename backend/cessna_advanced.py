@@ -25,19 +25,23 @@ fuel_rpm = fuelcons_prep[0]
 fuelcons = fuelcons_prep[1]
 
 velocity_power_disp = engine_prep[0]
-power_disp = engine_prep[1]
+power_disp_og = engine_prep[1]
 velo_load = engine_prep[2]
 power_load = engine_prep[3]
 
 eta_velo = eta_prep[0]
 eta = eta_prep[1]
 
-new_rpm_range = np.linspace(2000, 3000, 50)
+new_rpm_range = np.linspace(min(fuel_rpm), max(fuel_rpm), 50)
 new_velo_range = np.linspace(0, 100, 50)
-new_eff_pow_range = np.linspace(38, 75, 50)
+new_eff_pow_range = np.linspace(min(rpm_power), max(rpm_power), 50)
 
-power_load_arr = np.divide(basf.new_values_array(velo_load, power_load, 1, new_velo_range), 1000)
-power_disp = np.divide(basf.new_values_array(velocity_power_disp, power_disp, 4, new_velo_range), 1000)
+power_load_arr = basf.new_values_array(velo_load, power_load, 1, new_velo_range)
+power_disp = basf.new_values_array(velocity_power_disp, power_disp_og, 4, new_velo_range)
+
+result = basf.poly_equation(velocity_power_disp, power_disp_og, 4, velo_load, power_load, 1)
+print('Velo:', result)
+
 power_arr6 = basf.new_values_array(rpm, rpm_power, 6, new_rpm_range)
 fuelcons_arr = basf.new_values_array(fuel_rpm, fuelcons, 6, new_rpm_range)
 eta_arr = basf.new_values_array(eta_velo, eta, 6, new_velo_range)
@@ -47,7 +51,7 @@ area = Cessna150.area
 aspectratio = Cessna150.aspectratio
 cx0 = Cessna150.cx0
 range_step = 100
-velocity = 38.88
+velocity = 56
 time_step = range_step / velocity
 fuelmass = Cessna150.fuelmass
 end_mass = m_i - fuelmass + 14
@@ -57,8 +61,12 @@ eta_of_chosen_velocity = np.polyval(eta_coeff, velocity)
 fuel_of_power_coeff = np.polyfit(new_velo_range, fuelcons_arr, 6)
 efficiency = eta_of_chosen_velocity
 fig1 = plt.figure(0)
-plt.plot(power_arr6, fuelcons_arr, 'o')
-plt.title("Fuelcons of Effective Power")
+plt.plot(power_arr6, fuelcons_arr, '-k', )
+plt.grid(which='both', axis='both')
+plt.xlabel("Effective Power [kW]")
+plt.ylabel("Specific Fuel Consumption [kg/kWh]")
+plt.title("Specific Fuel Consumption versus Effective Power diagram")
+plt.minorticks_on()
 
 current_mass = Cessna150.startmass
 i=0
@@ -74,6 +82,8 @@ while current_mass >= end_mass:
     essential_pow = current_mass*9.81*velocity/(basf.cz(current_mass, 1.225, area, velocity)/basf.cx(basf.cz(current_mass, 1.225, area, velocity), cx0, aspectratio))/1000
     essential_pow_list.append(essential_pow)
     effective_pow = essential_pow/eta_of_chosen_velocity
+    if effective_pow > 75:
+        effective_pow = 75
     effective_pow_list.append(effective_pow)
     #print('Effective', effective_pow)
     if effective_pow <= 75 and effective_pow >= 28:
@@ -135,8 +145,11 @@ plt.subplot(313)
 plt.plot(iteration_array, fuelcons_of_velo_array, '-')
 plt.title("Fuelcons")
 
-
-
+plt.figure(2)
+plt.plot(new_rpm_range, power_arr6, 'k-')
+plt.title("Effective Power on RPM")
+plt.grid(which='both', axis='both')
+plt.minorticks_on()
 plt.show()
 
 
