@@ -105,6 +105,21 @@ def poly_root(x_es, y_es, deg, arg):
 
     return searched
 
+def poly_equation(x_es, y_es, deg, x2_es, y2_es, deg2):
+    coeff_arr = np.polyfit(x_es, y_es, deg)
+    coeff_arr2 = np.polyfit(x2_es, y2_es, deg2)
+    eq_arr = np.polysub(coeff_arr, coeff_arr2)
+    roots = np.roots(eq_arr)
+    real_valued = roots.real[abs(roots.imag)<1e-5]
+    for i in real_valued:
+        if np.polyval(coeff_arr, i) < np.polyval(coeff_arr2, i) + 1 and np.polyval(coeff_arr, i) > np.polyval(coeff_arr2, i) - 1:
+         searched = i
+        else:
+            searched = 'error'
+
+    return searched
+
+
 #cuts the alpha array from poly root to alpha of Cz_max (if provided from aero_prep)
 def new_alph_arr(alph_arr, poly_root):
     new_alph_arr = np.linspace(poly_root, max(alph_arr), 40) 
