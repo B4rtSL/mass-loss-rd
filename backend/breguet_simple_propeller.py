@@ -3,13 +3,15 @@ import math
 import matplotlib.pyplot as plt
 import basic_funcs as basf
 
+#zmieniac 1.25 na 0.75 w przypadku kiedy zapas nie jest brany pod uwagę w źródłach do wyznaczania zasięgu
+
 def breguetPropeller(startmass,nompow_prop,fuelcons_prop,propnumber,altitude,aspectratio,cx0,area,vmin,vmax,efficiency, fuelmass):
 
     #Air density from SI
     air_density=1.2255*(1-(altitude/44300))**4.256
 
     #masses needed in calculations
-    diffmass_prop=propnumber*nompow_prop*fuelcons_prop*0.75 
+    diffmass_prop=propnumber*nompow_prop*fuelcons_prop*1.25
     fuelmass_prop=fuelmass-diffmass_prop                 
     endmass_prop=startmass-fuelmass_prop                            
 
@@ -53,7 +55,7 @@ def breguetPropeller_2set(startmass,nompow_prop,fuelcons_prop,propnumber,altitud
     air_density=1.2255*(1-(altitude/44300))**4.256
 
     #masses needed in calculations
-    diffmass_prop=propnumber*nompow_prop*fuelcons_prop*0.75 
+    diffmass_prop=propnumber*nompow_prop*fuelcons_prop*1.25
     fuelmass_prop=fuelmass-diffmass_prop                 
     endmass_prop=startmass-fuelmass_prop 
     calc_mass = (startmass + endmass_prop)/2 
@@ -111,7 +113,7 @@ def breguetPropeller_3set(startmass,nompow_prop,fuelcons_prop,propnumber,altitud
     air_density=1.2255*(1-(altitude/44300))**4.256
 
     #masses needed in calculations
-    diffmass_prop=propnumber*nompow_prop*fuelcons_prop*0.75 
+    diffmass_prop=propnumber*nompow_prop*fuelcons_prop*1.25
     fuelmass_prop=fuelmass-diffmass_prop                 
     endmass_prop=startmass-fuelmass_prop 
     calc_mass = (startmass + endmass_prop)/2 
