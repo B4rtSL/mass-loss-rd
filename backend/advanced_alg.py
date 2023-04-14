@@ -31,7 +31,7 @@ def advanced_alg(rpm_input, fuelcons_input, eta_input, airplane: object, altitud
     #assignment of objects values to new arguments
     vmin = airplane.vmin
     vmax = airplane.vmax
-    m_i = airplane.startmass
+    startmass = airplane.startmass
     area = airplane.area
     aspectratio = airplane.aspectratio
     cx0 = airplane.cx0
@@ -49,17 +49,9 @@ def advanced_alg(rpm_input, fuelcons_input, eta_input, airplane: object, altitud
     air_density = 1.2255 * (1-(altitude/44300))**4.256
     
     print('Please type fuelmass calculating method\nAvailable methods are:\nRaymer\nPaturski\nAuthors')
-    decision = input()
-
-    if decision == 'Raymer':
-        end_mass = m_i*0.995*0.988*0.997*0.995
-    elif decision == 'Paturski':
-        diffmass = propnumber*nompow*avg_fuelcons*0.75
-        end_mass = m_i - fuelmass + diffmass
-    elif decision == 'Authors':
-        fuel_takeoff = avg_fuelcons * nompow / 3600 / wmax * (altitude)
-        end_mass = m_i - fuelmass + fuel_takeoff + m_i*(1-0.995)
-    print(end_mass, vmin, vmax)
+    type_calc = basf.mass_calc_type(airplane, altitude)
+    m_i = type_calc[0]
+    end_mass = type_calc[1]
     ranges_final_list = []
     essential_pow_list = []
     effective_pow_list = []
