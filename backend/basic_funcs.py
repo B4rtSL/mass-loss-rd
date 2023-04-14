@@ -231,3 +231,45 @@ def eta_prep(eta_input):
     quadruple_arr = [array_velos, array_eta]
 
     return quadruple_arr
+
+def mass_calc_type(airplane: object, altitude):
+    decision = input()
+
+    m_i = airplane.startmass
+    nompow = airplane.nompow
+    avg_fuelcons = airplane.fuelcons
+    propnumber = airplane.propnumber
+    wmax = airplane.wmax
+    fuelmass = airplane.fuelmass
+    proptype = airplane.proptype
+
+    if decision == 'Raymer' and propnumber == 1 and proptype == 'propeller':
+        current_mass = m_i - m_i*(1-0.995) - m_i*(1-0.995)*(1-0.988)
+        end_mass = (m_i - fuelmass)/(0.997+0.995-1)
+    elif decision == 'Raymer' and propnumber == 2 and proptype == 'propeller':
+        current_mass = m_i - m_i*(1-0.994) - m_i*(1-0.994)*(1-0.985)
+        end_mass = (m_i - fuelmass)/(0.996+0.995-1)
+    elif decision == 'Raymer' and proptype == 'jet':
+        current_mass = m_i - m_i*(1-0.97) - m_i*(1-0.97)*(1-0.985)
+        end_mass = (m_i - fuelmass)/(0.995)
+    elif decision == 'Paturski' and proptype == 'propeller':
+        diffmass = propnumber*nompow*avg_fuelcons*1.25
+        current_mass = m_i
+        end_mass = m_i - fuelmass + diffmass
+    elif decision == 'Paturski' and proptype == 'jet':
+        diffmass = propnumber*nompow*avg_fuelcons*1.25
+        current_mass = m_i
+        end_mass = m_i - fuelmass + diffmass
+    elif decision == 'Authors' and proptype == 'propeller':
+        fuel_takeoff = avg_fuelcons * nompow / 3600 / wmax * (altitude)
+        current_mass = m_i - m_i*(1-0.995) - fuel_takeoff
+        end_mass = (m_i - fuelmass)/0.995
+    elif decision == 'Authors' and proptype == 'jet':
+        fuel_takeoff = avg_fuelcons * nompow / 3600 / wmax * (altitude)
+        current_mass = m_i - m_i*(1-0.970) - fuel_takeoff
+        end_mass = (m_i - fuelmass)/0.995    
+    else:
+        print('Type Error - select correct type of calculation method.')
+        end_mass = m_i
+    
+    return [current_mass, end_mass]
