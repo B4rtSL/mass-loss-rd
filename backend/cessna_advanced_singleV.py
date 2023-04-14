@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import basic_funcs as basf
 import matplotlib.pyplot as plt
 from data_container import Cessna150
@@ -52,7 +53,7 @@ aspectratio = Cessna150.aspectratio
 cx0 = Cessna150.cx0
 range_step = 100
 velocity = 56
-time_step = range_step / velocity
+time_step = 1
 fuelmass = Cessna150.fuelmass
 end_mass = m_i - fuelmass + 14
 
@@ -67,6 +68,16 @@ plt.xlabel("Effective Power [kW]")
 plt.ylabel("Specific Fuel Consumption [kg/kWh]")
 plt.title("Specific Fuel Consumption versus Effective Power diagram")
 plt.minorticks_on()
+
+latex_power_for_fuelcons = np.around(power_arr6, decimals=3)
+latex_fuelcons = np.around(fuelcons_arr, decimals=3)
+
+raw_data = {'Power [kW]': latex_power_for_fuelcons[0::2],
+            'Specific Fuel Consumption [kg/kWh]': latex_fuelcons[0::2]
+            }
+
+df = pd.DataFrame(raw_data, columns=['Power [kW]', 'Specific Fuel Consumption [kg/kWh]'])
+df.to_csv('C:/Users/barto/Desktop/inżynierka/test-data/test-results/results-fuelcons-graph.csv')
 
 current_mass = Cessna150.startmass
 i=0
