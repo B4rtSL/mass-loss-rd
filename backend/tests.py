@@ -54,6 +54,12 @@ fuelmass = Cessna150.fuelmass
 end_mass = m_i - fuelmass + 14
 velocity_range = np.linspace(vmin, vmax, 50)
 eta_coeff = np.polyfit(eta_velo, eta, 6)
+altitude = 500
+air_density = 1.2255 * (1-(altitude/44300))**4.256
+wmax = Cessna150.wmax
+nompow = Cessna150.nompow
+fuel_takeoff = 0.349 * nompow / 3600 / wmax * (altitude)
+print('Fuel takeoff:',fuel_takeoff)
 
 ranges_final_list = []
 essential_pow_list = []
@@ -64,7 +70,7 @@ i=0
 for velocity in velocity_range:
     ranges = []
     endurances = []
-    time_step = range_step / velocity
+    time_step = 1
     eta_of_chosen_velocity = np.polyval(eta_coeff, velocity)
     efficiency = eta_of_chosen_velocity
     current_mass = Cessna150.startmass
@@ -73,7 +79,7 @@ for velocity in velocity_range:
     while current_mass >= end_mass:
         i+=1
         iteration_list.append(i)
-        essential_pow = current_mass*9.81*velocity/(basf.cz(current_mass, 1.225, area, velocity)/basf.cx(basf.cz(current_mass, 1.225, area, velocity), cx0, aspectratio))/1000
+        essential_pow = current_mass*9.81*velocity/(basf.cz(current_mass, air_density, area, velocity)/basf.cx(basf.cz(current_mass, air_density, area, velocity), cx0, aspectratio))/1000
         essential_pow_list.append(essential_pow)
         effective_pow = essential_pow/eta_of_chosen_velocity
         effective_pow_list.append(effective_pow)
@@ -89,7 +95,7 @@ for velocity in velocity_range:
             break
 
 
-        A_factor=1.225*area*velocity*velocity*math.sqrt(cx0*3.14*aspectratio)
+        A_factor=air_density*area*velocity*velocity*math.sqrt(cx0*3.14*aspectratio)
         endurance=1000*(efficiency/9.81/velocity/fuelcons_of_velo)*math.sqrt(3.14*aspectratio/cx0)*(math.atan(2*9.81*current_mass/A_factor)-math.atan(2*9.81*m_ii/A_factor))
         range=3.6*velocity*endurance
         endurances.append(endurance)

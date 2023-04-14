@@ -17,7 +17,7 @@ proptype = 'propeller'
 startmass = Hawker.startmass
 vmax = Hawker.vmax
 vmin = Hawker.vmin
-fuelmass  =Hawker.fuelmass
+fuelmass = Hawker.fuelmass
 
 breguet1 = bsp.breguetPropeller(startmass, nompow, avg_fuelcons, propnumber, altitude, aspectratio, cx0, area, vmin, vmax, efficiency, fuelmass)
 breguet1_velocity = breguet1[0]

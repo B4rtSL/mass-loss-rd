@@ -1,6 +1,8 @@
 import basic_funcs as basf
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
+from pathlib import Path
 import breguet_simple_propeller as bsp
 from data_container import Cessna150
 
@@ -11,6 +13,7 @@ eta_prep = basf.eta_prep(eta_input)
 eta_velo = eta_prep[0]
 eta = eta_prep[1]
 
+newfilepath = Path('C:/Users/barto/Desktop/inżynierka/test-data/test-results/data.csv')
 
 altitude = 0
 efficiency = 0.8
@@ -40,6 +43,17 @@ breguet3 = bsp.breguetPropeller_3set(startmass, nompow, avg_fuelcons, propnumber
 breguet3_velocity = breguet3[0]
 breguet3_times = breguet3[1]
 breguet3_ranges = breguet3[2]
+
+breguet1_velocity = np.around(breguet1_velocity, decimals=3)
+breguet1_ranges = np.around(breguet1_ranges, decimals=3)
+breguet1_times = np.around(breguet1_times, decimals=3)
+
+raw_data = {'velocity': breguet1_velocity[0::4],
+            'range': breguet1_ranges[0::4],
+            'endurance': breguet1_times[0::4]}
+
+df = pd.DataFrame(raw_data, columns=['velocity', 'range', 'endurance'])
+df.to_csv('C:/Users/barto/Desktop/inżynierka/test-data/test-results/data.csv')
 
 fig4 = plt.figure()
 plt.plot(breguet1_velocity, breguet1_ranges, "--r" , label = "Breguet-range-propeller-1")
