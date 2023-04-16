@@ -11,6 +11,13 @@ engine_input = "C:/Users/barto/Desktop/inżynierka/test-data/cessna-data/cessna-
 eta_input = "C:/Users/barto/Desktop/inżynierka/test-data/cessna-data/eta-velo.xlsx"
 
 def advanced_alg(rpm_input, fuelcons_input, eta_input, airplane: object, altitude, time_step):
+    cpu_start_time = time.process_time()
+    
+    print('Please type fuelmass calculating method\nAvailable methods are:\nRaymer\nPaturski\nAuthors')
+    type_calc = basf.mass_calc_type(airplane, altitude)
+
+    start_time = time.time()
+
     rpm_prep = basf.rpm_prep(rpm_input)
     rpm = rpm_prep[0]
     rpm_power = rpm_prep[1]
@@ -40,12 +47,6 @@ def advanced_alg(rpm_input, fuelcons_input, eta_input, airplane: object, altitud
 
     air_density = 1.2255 * (1-(altitude/44300))**4.256
     
-    print('Please type fuelmass calculating method\nAvailable methods are:\nRaymer\nPaturski\nAuthors')
-    type_calc = basf.mass_calc_type(airplane, altitude)
-    
-    start_time = time.time()
-    cpu_start_time = time.process_time()
-
     m_i = type_calc[0]
     end_mass = type_calc[1]
     ranges_final_list = []
