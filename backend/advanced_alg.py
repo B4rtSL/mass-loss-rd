@@ -44,6 +44,7 @@ def advanced_alg(rpm_input, fuelcons_input, eta_input, airplane: object, altitud
     type_calc = basf.mass_calc_type(airplane, altitude)
     
     start_time = time.time()
+    cpu_start_time = time.process_time()
 
     m_i = type_calc[0]
     end_mass = type_calc[1]
@@ -95,4 +96,5 @@ def advanced_alg(rpm_input, fuelcons_input, eta_input, airplane: object, altitud
 
     double_array = [ranges_final_array, endurances_final_array]
     end_time = (time.time() - start_time)
-    return double_array, end_time
+    cpu_end_time = (time.process_time() - cpu_start_time)
+    return double_array, end_time, cpu_end_time
