@@ -1,9 +1,7 @@
 import math
 import numpy as np
 import basic_funcs as basf
-import matplotlib.pyplot as plt
 from data_container import Cessna150
-from data_container import airplane
 import time
 
 cz_input = "C:/Users/barto/Desktop/inżynierka/test-data/cessna-data/cessna-cz-data.xlsx"
@@ -31,15 +29,9 @@ def advanced_alg(rpm_input, fuelcons_input, eta_input, airplane: object, altitud
     #assignment of objects values to new arguments
     vmin = airplane.vmin
     vmax = airplane.vmax
-    startmass = airplane.startmass
     area = airplane.area
     aspectratio = airplane.aspectratio
     cx0 = airplane.cx0
-    fuelmass = airplane.fuelmass
-    wmax = airplane.wmax
-    nompow = airplane.nompow
-    avg_fuelcons = airplane.fuelcons
-    propnumber = airplane.propnumber
 
     new_velo_range = np.linspace(vmin, vmax, 50)
     fuel_of_power_coeff = np.polyfit(new_velo_range, fuelcons_arr, 6)
@@ -50,12 +42,16 @@ def advanced_alg(rpm_input, fuelcons_input, eta_input, airplane: object, altitud
     
     print('Please type fuelmass calculating method\nAvailable methods are:\nRaymer\nPaturski\nAuthors')
     type_calc = basf.mass_calc_type(airplane, altitude)
+    
+    start_time = time.time()
+
     m_i = type_calc[0]
     end_mass = type_calc[1]
     ranges_final_list = []
+    endurances_final_list = []
     essential_pow_list = []
     effective_pow_list = []
-    start_time = time.time()
+
     for velocity in velocity_range:
         ranges = []
         endurances = []
@@ -88,18 +84,15 @@ def advanced_alg(rpm_input, fuelcons_input, eta_input, airplane: object, altitud
         
         range_array = np.array(ranges)
         range_result = np.sum(range_array)
-    
         ranges_final_list.append(range_result)
-
+        endurance_array = np.array(endurances)
+        endurance_result = np.sum(endurance_array)
+        endurances_final_list.append(endurance_result)
 
     ranges_final_array = np.array(ranges_final_list)
+    endurances_final_array = np.array(endurances_final_list)
     velocity_range = np.multiply(velocity_range, 3.6)
 
-    print("--- %s seconds ---" % (time.time() - start_time))
-    return ranges_final_array
-
-
-results = advanced_alg(rpm_input_cessna, fuelcons_input_cessna, eta_input, Cessna150, 0, 30)
-
-print(results)
-
+    double_array = [ranges_final_array, endurances_final_array]
+    end_time = (time.time() - start_time)
+    return double_array, end_time
