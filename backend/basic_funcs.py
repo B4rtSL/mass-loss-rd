@@ -122,7 +122,7 @@ def poly_equation(x_es, y_es, deg, x2_es, y2_es, deg2):
 
 #cuts the alpha array from poly root to alpha of Cz_max (if provided from aero_prep)
 def new_alph_arr(alph_arr, poly_root):
-    new_alph_arr = np.linspace(poly_root, max(alph_arr), 40) 
+    new_alph_arr = np.linspace(poly_root, max(alph_arr), 50) 
     return new_alph_arr
 
 #this function creates new cz array based on expected range - from max V Cz to Cz_max
