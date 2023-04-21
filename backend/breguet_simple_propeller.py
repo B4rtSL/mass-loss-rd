@@ -16,8 +16,8 @@ def breguetPropeller(startmass,nompow_prop,fuelcons_prop,propnumber,altitude,asp
     endmass_prop=startmass-fuelmass_prop                            
 
     print(endmass_prop)
-    #array of velocities, counting step - 100
-    x=np.linspace(vmin,vmax,100)
+    #array of velocities, counting step - 50
+    x=np.linspace(vmin,vmax,50)
 
     #creating empty arrays for further calculations
     times=[]
