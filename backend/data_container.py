@@ -44,5 +44,5 @@ class Hawker:
     vmin = 47
     vmax = 194.44
     wmax = 24
-    fuelmass = 1131.5
+    fuelmass = 832.35
     proptype = 'propeller'
