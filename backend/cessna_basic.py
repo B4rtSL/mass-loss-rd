@@ -29,6 +29,39 @@ vmax = Cessna150.vmax
 vmin = Cessna150.vmin
 fuelmass = Cessna150.fuelmass
 
+double_arr = basf.aero_prep(aero_input)
+alpha_arr = double_arr[0]
+cz_arr = double_arr[1]
+alpha_root = basf.poly_root(alpha_arr, cz_arr, 5, basf.cz(703.65625, 1.2255, area, vmax))
+coeff_arr = np.polyfit(alpha_arr, cz_arr, 5)
+new_alph_arr = basf.new_alph_arr(alpha_arr, alpha_root)
+new_cz_arr = basf.new_cz_arr(new_alph_arr, coeff_arr)
+new_cx_arr = basf.cx_arr(new_cz_arr, cx0, aspectratio)
+lift_drag = basf.lift_to_drag(new_cz_arr, new_cx_arr)
+
+fig3 = plt.figure()
+plt.plot(alpha_arr, cz_arr, "--r" , label = "aero_prep")
+plt.plot(new_alph_arr, new_cz_arr,"-b" , label = "alpha_root")
+plt.plot(new_alph_arr, np.divide(lift_drag,10), "-.g" , label = "lift_drag/10")
+plt.legend(loc="best")
+plt.xlabel("AoA [deg]")
+plt.ylabel("Lift Coefficient, (Lift/Drag)/10 [-]")
+plt.grid(which='both', axis='both')
+
+latex_aoa = np.around(new_alph_arr, decimals=3)
+latex_cz = np.around(new_cz_arr, decimals=3)
+latex_cx = np.around(new_cx_arr, decimals=3)
+latex_LD = np.around(lift_drag, decimals=3)
+
+raw_data = {'AoA [deg]': latex_aoa[0::2],
+            'Cz [-]': latex_cz[0::2],
+            'Cx [-]': latex_cx[0::2],
+            'L/D [-]': latex_LD[0::2]
+            }
+
+df = pd.DataFrame(raw_data, columns=['AoA [deg]', 'Cz [-]', 'Cx [-]', 'L/D [-]'])
+df.to_csv('C:/Users/barto/Desktop/inżynierka/test-data/test-results/results-cz-graph-cessna.csv')
+
 breguet1 = bsp.breguetPropeller(startmass, nompow, avg_fuelcons, propnumber, altitude, aspectratio, cx0, area, vmin, vmax, efficiency, fuelmass)
 breguet1_velocity = breguet1[0]
 breguet1_times = breguet1[1]
@@ -48,30 +81,33 @@ breguet1_velocity = np.around(breguet1_velocity, decimals=3)
 breguet1_ranges = np.around(breguet1_ranges, decimals=3)
 breguet1_times = np.around(breguet1_times, decimals=3)
 
-raw_data = {'velocity': breguet1_velocity[0::4],
-            'range': breguet1_ranges[0::4],
-            'endurance': breguet1_times[0::4]}
+# raw_data = {'velocity': breguet1_velocity[0::4],
+#             'range': breguet1_ranges[0::4],
+#             'endurance': breguet1_times[0::4]}
 
-df = pd.DataFrame(raw_data, columns=['velocity', 'range', 'endurance'])
-df.to_csv('C:/Users/barto/Desktop/inżynierka/test-data/test-results/data.csv')
+# df = pd.DataFrame(raw_data, columns=['velocity', 'range', 'endurance'])
+# df.to_csv('C:/Users/barto/Desktop/inżynierka/test-data/test-results/data.csv')
 
 fig4 = plt.figure()
-plt.plot(breguet1_velocity, breguet1_ranges, "--r" , label = "Breguet-range-propeller-1")
-plt.plot(breguet2_velocity, breguet2_ranges,"-b" , label = "Breguet-range-propeller-2")
-plt.plot(breguet3_velocity, breguet3_ranges, "-.g" , label = "Breguet-range-propeller-3")
+plt.plot(breguet1_velocity, breguet1_ranges, "--r" , label = "Breguet-range-1")
+plt.plot(breguet2_velocity, breguet2_ranges,"-b" , label = "Breguet-range-2")
+plt.plot(breguet3_velocity, breguet3_ranges, "-.g" , label = "Breguet-range-3")
 plt.legend(loc="best")
 plt.xlabel("Velocity [km/h]")
 plt.ylabel("Range [km]")
-plt.title("Range on Velocity")
+plt.title("Range vs Velocity")
+plt.grid(which='both', axis='both')
+
 
 fig5 = plt.figure()
-plt.plot(breguet1_velocity, breguet1_times, "--r" , label = "Breguet-endurance-propeller-1")
-plt.plot(breguet2_velocity, breguet2_times,"-b" , label = "Breguet-endurance-propeller-2")
-plt.plot(breguet3_velocity, breguet3_times, "-.g" , label = "Breguet-endurance-propeller-3")
+plt.plot(breguet1_velocity, breguet1_times, "--r" , label = "Breguet-endurance-1")
+plt.plot(breguet2_velocity, breguet2_times,"-b" , label = "Breguet-endurance-2")
+plt.plot(breguet3_velocity, breguet3_times, "-.g" , label = "Breguet-endurance-3")
 plt.legend(loc="best")
 plt.xlabel("Velocity [km/h]")
-plt.ylabel("Time [100h]")
-plt.title("Endurance on Velocity")
+plt.ylabel("Endurance [100h]")
+plt.title("Endurance vs Velocity")
+plt.grid(which='both', axis='both')
 
 
 fig5 = plt.figure()
