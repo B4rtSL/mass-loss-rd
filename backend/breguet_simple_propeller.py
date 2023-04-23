@@ -5,7 +5,7 @@ import basic_funcs as basf
 
 #zmieniac 1.25 na 0.75 w przypadku kiedy zapas nie jest brany pod uwagę w źródłach do wyznaczania zasięgu
 
-def breguetPropeller(startmass,nompow_prop,fuelcons_prop,propnumber,altitude,aspectratio,cx0,area,vmin,vmax,efficiency, fuelmass):
+def breguetPropeller(startmass,nompow_prop,fuelcons_prop,propnumber,altitude,aspectratio,cx0,area,vmin,vmax,efficiency, fuelmass, aero_input):
 
     #Air density from SI
     air_density=1.2255*(1-(altitude/44300))**4.256
@@ -14,8 +14,11 @@ def breguetPropeller(startmass,nompow_prop,fuelcons_prop,propnumber,altitude,asp
     diffmass_prop=propnumber*nompow_prop*fuelcons_prop*1.25
     fuelmass_prop=fuelmass-diffmass_prop                 
     endmass_prop=startmass-fuelmass_prop                            
+    calc_mass = (startmass + endmass_prop)/2
 
-    print(endmass_prop)
+    double_arr = basf.aero_prep(aero_input)
+    cz_arr = double_arr[1]
+    vmin = basf.velocity(calc_mass, air_density, area, max(cz_arr))
     #array of velocities, counting step - 50
     x=np.linspace(vmin,vmax,50)
 
