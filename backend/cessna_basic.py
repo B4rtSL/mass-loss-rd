@@ -15,7 +15,7 @@ eta = eta_prep[1]
 
 newfilepath = Path('C:/Users/barto/Desktop/inżynierka/test-data/test-results/data.csv')
 
-altitude = 0
+altitude = 2500
 efficiency = 0.8
 area = Cessna150.area
 aspectratio = Cessna150.aspectratio
@@ -28,16 +28,24 @@ startmass = Cessna150.startmass
 vmax = Cessna150.vmax
 vmin = Cessna150.vmin
 fuelmass = Cessna150.fuelmass
+air_density=1.2255*(1-(altitude/44300))**4.256
 
 double_arr = basf.aero_prep(aero_input)
 alpha_arr = double_arr[0]
 cz_arr = double_arr[1]
-alpha_root = basf.poly_root(alpha_arr, cz_arr, 5, basf.cz(703.65625, 1.2255, area, vmax))
+alpha_root = basf.poly_root(alpha_arr, cz_arr, 5, basf.cz(704.682812501, air_density, area, vmax))
 coeff_arr = np.polyfit(alpha_arr, cz_arr, 5)
 new_alph_arr = basf.new_alph_arr(alpha_arr, alpha_root)
 new_cz_arr = basf.new_cz_arr(new_alph_arr, coeff_arr)
 new_cx_arr = basf.cx_arr(new_cz_arr, cx0, aspectratio)
 lift_drag = basf.lift_to_drag(new_cz_arr, new_cx_arr)
+
+print('Cz dla vmax', basf.cz(704.682812501, air_density, area, vmax))
+print('New Cz arr', new_cz_arr)
+print('V dla Czmax', basf.velocity(650, air_density, area, 1.1502277))
+
+x=basf.velocity_arr(704.682812501, air_density, area, new_cz_arr)
+print(x)
 
 fig3 = plt.figure()
 plt.plot(alpha_arr, cz_arr, "--r" , label = "aero_prep")
@@ -62,7 +70,7 @@ raw_data = {'AoA [deg]': latex_aoa[0::2],
 df = pd.DataFrame(raw_data, columns=['AoA [deg]', 'Cz [-]', 'Cx [-]', 'L/D [-]'])
 df.to_csv('C:/Users/barto/Desktop/inżynierka/test-data/test-results/results-cz-graph-cessna.csv')
 
-breguet1 = bsp.breguetPropeller(startmass, nompow, avg_fuelcons, propnumber, altitude, aspectratio, cx0, area, vmin, vmax, efficiency, fuelmass)
+breguet1 = bsp.breguetPropeller(startmass, nompow, avg_fuelcons, propnumber, altitude, aspectratio, cx0, area, vmin, vmax, efficiency, fuelmass, aero_input)
 breguet1_velocity = breguet1[0]
 breguet1_times = breguet1[1]
 breguet1_ranges = breguet1[2]

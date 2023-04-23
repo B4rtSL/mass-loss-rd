@@ -54,7 +54,7 @@ df = pd.DataFrame(raw_data, columns=['AoA [deg]', 'Cz [-]', 'Cx [-]', 'L/D [-]']
 df.to_csv('C:/Users/barto/Desktop/inżynierka/test-data/test-results/results-cz-graph-hawker.csv')
 
 
-breguet1 = bsp.breguetPropeller(startmass, nompow, avg_fuelcons, propnumber, altitude, aspectratio, cx0, area, vmin, vmax, efficiency, fuelmass)
+breguet1 = bsp.breguetPropeller(startmass, nompow, avg_fuelcons, propnumber, altitude, aspectratio, cx0, area, vmin, vmax, efficiency, fuelmass, aero_input)
 breguet1_velocity = breguet1[0]
 breguet1_times = breguet1[1]
 breguet1_ranges = breguet1[2]
