@@ -20,7 +20,7 @@ class Cessna150:
     startmass = 727.75
     empty_mass = 504
     nompow = 74.6
-    fuelcons = 0.244638069705094
+    fuelcons = 0.266655496
     propnumber = 1
     aspectratio = 2.855
     cx0 = 0.0269
