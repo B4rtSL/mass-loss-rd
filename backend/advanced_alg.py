@@ -40,11 +40,6 @@ def advanced_alg(rpm_input, fuelcons_input, eta_input, airplane: object, altitud
     aspectratio = airplane.aspectratio
     cx0 = airplane.cx0
 
-    new_velo_range = np.linspace(vmin, vmax, 50)
-    fuel_of_power_coeff = np.polyfit(new_velo_range, fuelcons_arr, 6)
-    velocity_range = np.linspace(vmin, vmax, 50)
-    eta_coeff = np.polyfit(eta_velo, eta, 6)
-
     air_density = 1.2255 * (1-(altitude/44300))**4.256
     
     m_i = type_calc[0]
@@ -53,6 +48,12 @@ def advanced_alg(rpm_input, fuelcons_input, eta_input, airplane: object, altitud
     endurances_final_list = []
     essential_pow_list = []
     effective_pow_list = []
+
+    vmin = basf.velocity(m_i, air_density, area, 1.15)
+    new_velo_range = np.linspace(vmin, vmax, 50)
+    fuel_of_power_coeff = np.polyfit(new_velo_range, fuelcons_arr, 6)
+    velocity_range = np.linspace(vmin, vmax, 50)
+    eta_coeff = np.polyfit(eta_velo, eta, 6)
 
     for velocity in velocity_range:
         ranges = []
@@ -73,7 +74,11 @@ def advanced_alg(rpm_input, fuelcons_input, eta_input, airplane: object, altitud
                 burnt_mass = time_step/3600*fuelcons_of_velo*effective_pow
                 m_ii = current_mass - burnt_mass
             else:
-                print('Power Values Exceeded')
+                effective_pow = airplane.nompow
+                fuelcons_of_velo = np.polyval(fuel_of_power_coeff, effective_pow)
+                burnt_mass = time_step/3600*fuelcons_of_velo*effective_pow
+                m_ii = current_mass - burnt_mass
+                print('Power Values Exceeded, Max Available Value Taken.')
                 break
 
             A_factor=air_density*area*velocity*velocity*math.sqrt(cx0*3.14*aspectratio)
