@@ -26,7 +26,7 @@ class Cessna150:
     cx0 = 0.0269
     area = 14.865
     vmin = 26.05
-    vmax = 56.60
+    vmax = 54.98
     wmax = 2.88
     fuelmass = 71
     proptype = 'propeller'

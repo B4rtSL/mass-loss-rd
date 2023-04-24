@@ -130,6 +130,6 @@ plt.plot(breguet1_velocity, breguet1_ranges, label = "Breguet-range-propeller-1"
 plt.legend(loc="best")
 plt.xlabel("Velocity [km/h]")
 plt.ylabel("Endurance [100h] and Range [km]")
-plt.title("Range Endurance vs Velocity - 1st Method")
+plt.title("Range and Endurance vs Velocity - 1st Method")
 plt.grid(which='both', axis='both')
 plt.show()
