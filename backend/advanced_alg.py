@@ -95,7 +95,7 @@ def advanced_alg(rpm_input, fuelcons_input, eta_input, airplane: object, altitud
     endurances_final_array = np.array(endurances_final_list)
     velocity_range = np.multiply(velocity_range, 3.6)
 
-    double_array = [ranges_final_array, endurances_final_array]
+    triple_array = [ranges_final_array, endurances_final_array, velocity_range]
     end_time = (time.time() - start_time)
     cpu_end_time = (time.process_time() - cpu_start_time)
-    return double_array, end_time, cpu_end_time
+    return triple_array, end_time, cpu_end_time

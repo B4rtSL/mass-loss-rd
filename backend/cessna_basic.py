@@ -40,12 +40,18 @@ new_cz_arr = basf.new_cz_arr(new_alph_arr, coeff_arr)
 new_cx_arr = basf.cx_arr(new_cz_arr, cx0, aspectratio)
 lift_drag = basf.lift_to_drag(new_cz_arr, new_cx_arr)
 
-print('Cz dla vmax', basf.cz(704.682812501, air_density, area, vmax))
-print('New Cz arr', new_cz_arr)
-print('V dla Czmax', basf.velocity(650, air_density, area, 1.1502277))
+diffmass_prop=propnumber*nompow*avg_fuelcons*1.25
+fuelmass_prop=fuelmass-diffmass_prop                 
+endmass_prop=startmass-fuelmass_prop                            
+calc_mass = (startmass + endmass_prop)/2
 
-x=basf.velocity_arr(704.682812501, air_density, area, new_cz_arr)
-print(x)
+print('calc mass', calc_mass, 'diffmass', diffmass_prop, 'fuelmass_prop',fuelmass_prop)
+# print('Cz dla vmax', basf.cz(704.682812501, air_density, area, vmax))
+# print('New Cz arr', new_cz_arr)
+# print('V dla Czmax', basf.velocity(650, air_density, area, 1.1502277))
+
+# x=basf.velocity_arr(704.682812501, air_density, area, new_cz_arr)
+# print(x)
 
 fig3 = plt.figure()
 plt.plot(alpha_arr, cz_arr, "--r" , label = "aero_prep")
@@ -124,4 +130,6 @@ plt.plot(breguet1_velocity, breguet1_ranges, label = "Breguet-range-propeller-1"
 plt.legend(loc="best")
 plt.xlabel("Velocity [km/h]")
 plt.ylabel("Endurance [100h] and Range [km]")
+plt.title("Range Endurance vs Velocity - 1st Method")
+plt.grid(which='both', axis='both')
 plt.show()
