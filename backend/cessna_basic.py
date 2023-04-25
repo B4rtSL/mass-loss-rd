@@ -15,7 +15,7 @@ eta = eta_prep[1]
 
 newfilepath = Path('C:/Users/barto/Desktop/inżynierka/test-data/test-results/data.csv')
 
-altitude = 2500
+altitude = 762
 efficiency = 0.8
 area = Cessna150.area
 aspectratio = Cessna150.aspectratio

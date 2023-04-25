@@ -10,7 +10,7 @@ rpm_input_cessna = 'C:/Users/barto/Desktop/inżynierka/test-data/cessna-data/ces
 engine_input = "C:/Users/barto/Desktop/inżynierka/test-data/cessna-data/cessna-power-const.xlsx"
 eta_input = "C:/Users/barto/Desktop/inżynierka/test-data/cessna-data/eta-velo.xlsx"
 
-results, time, cpu = advanced_alg(rpm_input_cessna, fuelcons_input_cessna, eta_input, Cessna150, 2500, 30)
+results, time, cpu = advanced_alg(rpm_input_cessna, fuelcons_input_cessna, eta_input, Cessna150, 762, 30)
 
 ranges = results[0]
 endurances = np.multiply(100, results[1])
