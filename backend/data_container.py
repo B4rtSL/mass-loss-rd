@@ -1,5 +1,5 @@
 class airplane:
-    def __init__(self, startmass, empty_mass, nompow, fuelcons, propnumber, aspectratio, cx0, area, vmin, vmax, wmax, fuelmass, proptype: str):
+    def __init__(self, startmass, empty_mass, nompow, fuelcons, propnumber, aspectratio, cx0, area, vmin, vmax, wmax, fuelmass, proptype: str, czmax):
          self.startmass = startmass
          self.empty_mass = empty_mass
          self.nompow = nompow
@@ -13,8 +13,9 @@ class airplane:
          self.wmax = wmax
          self.fuelmass = fuelmass
          self.proptype = proptype
+         self.czmax = czmax
 
-cessna = airplane(725.75, 504, 74.6, 0.233385, 1, 2.855, 0.0269, 14.865, 26.05, 56.60, 2.88, 71, 'propeller')
+cessna = airplane(725.75, 504, 74.6, 0.233385, 1, 2.855, 0.0269, 14.865, 26.05, 56.60, 2.88, 71, 'propeller', 1.156)
 
 class Cessna150:
     startmass = 727.75
@@ -30,6 +31,7 @@ class Cessna150:
     wmax = 2.88
     fuelmass = 71
     proptype = 'propeller'
+    czmax = 1.156
 
 
 class Hawker:
@@ -46,3 +48,4 @@ class Hawker:
     wmax = 24
     fuelmass = 832.35
     proptype = 'propeller'
+    czmax = 1.51

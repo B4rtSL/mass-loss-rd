@@ -39,6 +39,7 @@ def advanced_alg(rpm_input, fuelcons_input, eta_input, airplane: object, altitud
     area = airplane.area
     aspectratio = airplane.aspectratio
     cx0 = airplane.cx0
+    czmax = airplane.czmax
 
     air_density = 1.2255 * (1-(altitude/44300))**4.256
     
@@ -49,7 +50,7 @@ def advanced_alg(rpm_input, fuelcons_input, eta_input, airplane: object, altitud
     essential_pow_list = []
     effective_pow_list = []
 
-    vmin = basf.velocity(m_i, air_density, area, 1.15)
+    vmin = basf.velocity(m_i, air_density, area, czmax)
     new_velo_range = np.linspace(vmin, vmax, 50)
     fuel_of_power_coeff = np.polyfit(new_velo_range, fuelcons_arr, 6)
     velocity_range = np.linspace(vmin, vmax, 50)
