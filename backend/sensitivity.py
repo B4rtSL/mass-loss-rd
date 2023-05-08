@@ -129,9 +129,9 @@ plt.grid(which='both', axis='both')
 
 
 fig7 = plt.figure()
-plt.plot(breguet120eff_velocity, breguet120eff_ranges, "--r" , label = "120% of Average Efficiency")
-plt.plot(breguet100eff_velocity, breguet100eff_ranges,"-b" , label = "100% of Average Efficiency")
-plt.plot(breguet80eff_velocity, breguet80eff_ranges, "-.g" , label = "80% of Average Efficiency")
+plt.plot(breguet120eff_velocity, breguet120eff_times, "--r" , label = "120% of Average Efficiency")
+plt.plot(breguet100eff_velocity, breguet100eff_times,"-b" , label = "100% of Average Efficiency")
+plt.plot(breguet80eff_velocity, breguet80eff_times, "-.g" , label = "80% of Average Efficiency")
 plt.legend(loc="best")
 plt.xlabel("Velocity [km/h]")
 plt.ylabel("Endurance [100h]")
